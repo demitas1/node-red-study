@@ -1,0 +1,21 @@
+services:
+  nodered:
+    image: nodered/node-red:latest
+    container_name: nodered
+    restart: unless-stopped
+    user: "${PUID:-1000}:${PGID:-1000}"  # Run as current user
+    ports:
+      - "1880:1880"  # Node-RED Web UI / HTTPノード用
+    volumes:
+      - ./data:/data       # フローや設定の永続化
+      - ./hostfiles:/hostfiles  # ホスト側ディレクトリをアクセス可能に
+    environment:
+      - NODE_RED_ENABLE_PROJECTS=false
+      - TZ=Asia/Tokyo  # Set timezone for accurate timestamp
+    networks:
+      - nodered_net
+
+networks:
+  nodered_net:
+    driver: bridge
+
