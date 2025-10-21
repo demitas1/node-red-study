@@ -4,6 +4,20 @@ docker/data/
 # Host files directory (optional, uncomment if you want to ignore)
 # docker/hostfiles/
 
+# Environment files
+docker/.env
+
+# Mosquitto data and logs
+docker/mosquitto/data/
+docker/mosquitto/log/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
 # Docker volumes
 *.log
 
@@ -27,3 +41,4 @@ Thumbs.db
 *.tmp
 *.bak
 *.backup
+tmp/

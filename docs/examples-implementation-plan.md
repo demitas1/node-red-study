@@ -1,18 +1,18 @@
-# Examples Implementation Plan
+# サンプル実装計画
 
-## Overview
+## 概要
 
-This document outlines the plan for creating and managing Node-RED flow examples in this repository. The examples will serve as learning materials for various Node-RED concepts and use cases.
+このドキュメントは、このリポジトリでNode-REDフローのサンプルを作成・管理するための計画を示します。サンプルは、様々なNode-REDの概念とユースケースの学習教材として役立ちます。
 
-## Directory Structure
+## ディレクトリ構造
 
 ```
 examples/
-├── README.md                    # Examples overview and usage instructions
+├── README.md                    # サンプル概要と使用方法
 ├── basic/
 │   ├── 01-hello-world/
-│   │   ├── flow.json           # Flow definition
-│   │   └── README.md           # Description and instructions
+│   │   ├── flow.json           # フロー定義
+│   │   └── README.md           # 説明と手順
 │   ├── 02-simple-timer/
 │   │   ├── flow.json
 │   │   └── README.md
@@ -30,7 +30,7 @@ examples/
 │   ├── 01-json-transform/
 │   │   ├── flow.json
 │   │   ├── README.md
-│   │   └── sample-data.json    # Sample input data if needed
+│   │   └── sample-data.json    # サンプル入力データ（必要な場合）
 │   └── 02-csv-parser/
 │       ├── flow.json
 │       ├── README.md
@@ -41,181 +41,181 @@ examples/
         └── README.md
 ```
 
-## Categories
+## カテゴリ
 
-### 1. Basic
-- Hello World flow
-- Timer-based flows
-- Debug output and logging
-- Function node basics
-- Template node usage
+### 1. 基本（Basic）
+- Hello Worldフロー
+- タイマーベースのフロー
+- デバッグ出力とログ記録
+- Functionノードの基本
+- Templateノードの使い方
 
 ### 2. HTTP
-- Simple HTTP API endpoints
-- REST client requests
-- Webhook handling
-- HTTP authentication
-- Query parameter processing
+- シンプルなHTTP APIエンドポイント
+- RESTクライアントリクエスト
+- Webhookの処理
+- HTTP認証
+- クエリパラメータの処理
 
-### 3. Data Processing
-- JSON transformation
-- CSV parsing
-- Data filtering and mapping
-- Array operations
-- String manipulation
+### 3. データ処理（Data Processing）
+- JSON変換
+- CSVパース
+- データのフィルタリングとマッピング
+- 配列操作
+- 文字列操作
 
-### 4. Integration
-- File system operations
-- External API integration
-- Database connections (if needed)
-- MQTT messaging
-- Email notifications
+### 4. 連携（Integration）
+- ファイルシステム操作
+- 外部API連携
+- データベース接続（必要に応じて）
+- MQTTメッセージング
+- メール通知
 
-## Import Method (Option 1: Manual Import)
+## インポート方法（オプション1：手動インポート）
 
-Users will manually import examples using Node-RED's built-in Import feature. This approach is:
-- **Simple**: No additional tools required
-- **Flexible**: Users can select specific flows to import
-- **Safe**: No automatic modifications to the running environment
-- **Educational**: Users learn the standard Node-RED import process
+ユーザーはNode-RED組み込みのインポート機能を使って手動でサンプルをインポートします。このアプローチは次の特徴があります：
+- **シンプル**: 追加ツールが不要
+- **柔軟性**: ユーザーが特定のフローを選択してインポート可能
+- **安全**: 実行環境への自動変更なし
+- **教育的**: ユーザーが標準的なNode-REDインポートプロセスを学べる
 
-### How to Import
+### インポート手順
 
-1. Browse the `examples/` directory
-2. Open the desired example's `flow.json` file
-3. Copy the JSON content
-4. In Node-RED UI:
-   - Click the hamburger menu (☰) → Import
-   - Paste the JSON content
-   - Click "Import"
-   - Position the flow on the canvas
-   - Click "Deploy"
+1. `examples/` ディレクトリを参照
+2. 目的のサンプルの `flow.json` ファイルを開く
+3. JSON内容をコピー
+4. Node-RED UIで：
+   - ハンバーガーメニュー（☰）→ インポートをクリック
+   - JSON内容を貼り付け
+   - 「Import」をクリック
+   - キャンバス上にフローを配置
+   - 「Deploy」をクリック
 
-## Example README Template
+## サンプルREADMEテンプレート
 
-Each example should include a `README.md` with the following structure:
+各サンプルには、以下の構造の `README.md` を含めます：
 
 ```markdown
-# [Example Name]
+# [サンプル名]
 
-## Description
-Brief description of what this flow does and its purpose.
+## 説明
+このフローが何をするか、その目的の簡単な説明。
 
-## Prerequisites
-- List of required custom nodes (if any)
-- Required external services or APIs
-- Any configuration needed before running
+## 前提条件
+- 必要なカスタムノードのリスト（ある場合）
+- 必要な外部サービスやAPI
+- 実行前に必要な設定
 
-## Nodes Used
-- Node type 1 (purpose)
-- Node type 2 (purpose)
-- Node type 3 (purpose)
+## 使用ノード
+- ノードタイプ1（目的）
+- ノードタイプ2（目的）
+- ノードタイプ3（目的）
 
-## How to Import
-1. Copy the contents of `flow.json`
-2. In Node-RED, go to Menu → Import
-3. Paste the JSON and click Import
-4. Deploy the flow
+## インポート方法
+1. `flow.json` の内容をコピー
+2. Node-REDで、メニュー → インポートに移動
+3. JSONを貼り付けてインポートをクリック
+4. フローをデプロイ
 
-## Configuration
-Step-by-step instructions for any required configuration:
-1. Double-click the [node name] node
-2. Set [property] to [value]
-3. Click Done
+## 設定
+必要な設定の手順：
+1. [ノード名]ノードをダブルクリック
+2. [プロパティ]を[値]に設定
+3. 完了をクリック
 
-## Usage
-How to trigger and use the flow:
-1. [Trigger method]
-2. [Where to see output]
-3. [Expected behavior]
+## 使い方
+フローのトリガー方法と使用方法：
+1. [トリガー方法]
+2. [出力を確認する場所]
+3. [期待される動作]
 
-## Expected Output
-Description or example of what the flow produces.
+## 期待される出力
+フローが生成する内容の説明または例。
 
-## Learning Points
-- Key concept 1: Explanation
-- Key concept 2: Explanation
-- Key concept 3: Explanation
+## 学習ポイント
+- 重要概念1: 説明
+- 重要概念2: 説明
+- 重要概念3: 説明
 
-## Variations
-Suggestions for how to modify or extend this flow for learning purposes.
+## バリエーション
+学習目的でこのフローを変更・拡張する方法の提案。
 ```
 
-## Examples Index (examples/README.md)
+## サンプルインデックス（examples/README.md）
 
-The main `examples/README.md` should provide:
-- Overview of all available examples
-- Quick reference table with categories, difficulty levels
-- Links to each example
-- General import instructions
-- Prerequisites for running examples
+メインの `examples/README.md` には以下を含めます：
+- 利用可能なすべてのサンプルの概要
+- カテゴリと難易度レベルのクイックリファレンステーブル
+- 各サンプルへのリンク
+- 一般的なインポート手順
+- サンプル実行のための前提条件
 
-### Example Table Format
+### サンプルテーブル形式
 
-| Category | Example | Difficulty | Description |
-|----------|---------|------------|-------------|
-| Basic | 01-hello-world | Beginner | Simple inject and debug flow |
-| Basic | 02-simple-timer | Beginner | Periodic message generation |
-| HTTP | 01-simple-api | Intermediate | Create a basic REST API |
+| カテゴリ | サンプル | 難易度 | 説明 |
+|----------|---------|--------|------|
+| 基本 | 01-hello-world | 初級 | シンプルなinjectとdebugフロー |
+| 基本 | 02-simple-timer | 初級 | 定期的なメッセージ生成 |
+| HTTP | 01-simple-api | 中級 | 基本的なREST APIの作成 |
 
-## Implementation Phases
+## 実装フェーズ
 
-### Phase 1: Setup
-- [ ] Create `examples/` directory structure
-- [ ] Create main `examples/README.md`
-- [ ] Document import instructions
+### フェーズ1: セットアップ
+- [ ] `examples/` ディレクトリ構造の作成
+- [ ] メイン `examples/README.md` の作成
+- [ ] インポート手順のドキュメント化
 
-### Phase 2: Basic Examples
+### フェーズ2: 基本サンプル
 - [ ] 01-hello-world
 - [ ] 02-simple-timer
 - [ ] 03-debug-output
 
-### Phase 3: HTTP Examples
+### フェーズ3: HTTPサンプル
 - [ ] 01-simple-api
 - [ ] 02-rest-client
 
-### Phase 4: Data Processing Examples
+### フェーズ4: データ処理サンプル
 - [ ] 01-json-transform
 - [ ] 02-csv-parser
 
-### Phase 5: Integration Examples
+### フェーズ5: 連携サンプル
 - [ ] 01-file-processing
-- [ ] Additional examples as needed
+- [ ] 必要に応じて追加サンプル
 
-## File Naming Conventions
+## ファイル命名規則
 
-- **Flow files**: Always named `flow.json`
-- **Documentation**: Always named `README.md`
-- **Sample data**: Descriptive names (e.g., `sample-data.json`, `test-input.csv`)
-- **Directories**: Lowercase with hyphens, numbered for ordering (e.g., `01-hello-world`)
+- **フローファイル**: 常に `flow.json` という名前
+- **ドキュメント**: 常に `README.md` という名前
+- **サンプルデータ**: 説明的な名前（例: `sample-data.json`, `test-input.csv`）
+- **ディレクトリ**: 小文字とハイフン、順序付けのために番号付き（例: `01-hello-world`）
 
-## Best Practices
+## ベストプラクティス
 
-1. **Keep examples focused**: Each example should demonstrate one concept clearly
-2. **Progressive complexity**: Number examples to guide learning progression
-3. **Include comments**: Use Comment nodes in flows to explain key points
-4. **Test thoroughly**: Ensure all examples work with a fresh Node-RED installation
-5. **Document dependencies**: Clearly state any required custom nodes or external services
-6. **Provide sample data**: Include test data files where applicable
-7. **Use descriptive node names**: Help users understand the flow at a glance
+1. **サンプルを焦点化**: 各サンプルは1つの概念を明確に示すこと
+2. **段階的な複雑さ**: 学習の進行をガイドするために番号を付ける
+3. **コメントを含める**: フローの重要なポイントを説明するためにCommentノードを使用
+4. **徹底的にテスト**: すべてのサンプルが新規Node-REDインストールで動作することを確認
+5. **依存関係をドキュメント化**: 必要なカスタムノードや外部サービスを明確に記述
+6. **サンプルデータを提供**: 該当する場合はテストデータファイルを含める
+7. **説明的なノード名を使用**: ユーザーが一目でフローを理解できるようにする
 
-## Quality Checklist
+## 品質チェックリスト
 
-Before adding a new example, ensure:
-- [ ] `flow.json` is valid and tested
-- [ ] `README.md` follows the template
-- [ ] All prerequisites are documented
-- [ ] Flow includes comment nodes for clarity
-- [ ] Example is listed in `examples/README.md`
-- [ ] Node names are descriptive
-- [ ] Sample data files are included if needed
+新しいサンプルを追加する前に確認：
+- [ ] `flow.json` が有効でテスト済み
+- [ ] `README.md` がテンプレートに従っている
+- [ ] すべての前提条件がドキュメント化されている
+- [ ] フローに明確化のためのコメントノードが含まれている
+- [ ] サンプルが `examples/README.md` にリストされている
+- [ ] ノード名が説明的である
+- [ ] 必要に応じてサンプルデータファイルが含まれている
 
-## Future Enhancements
+## 今後の機能拡張
 
-Potential future improvements:
-- Add difficulty ratings to examples
-- Create video walkthroughs for complex examples
-- Add automated testing for flows
-- Create a web-based catalog viewer
-- Add troubleshooting sections to READMEs
-- Include performance considerations for larger flows
+将来的な改善案：
+- サンプルに難易度評価を追加
+- 複雑なサンプルのビデオウォークスルーを作成
+- フローの自動テストを追加
+- Webベースのカタログビューアーを作成
+- READMEにトラブルシューティングセクションを追加
+- 大規模フローのパフォーマンス考慮事項を含める

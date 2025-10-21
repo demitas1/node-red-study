@@ -5,13 +5,48 @@ services:
     restart: unless-stopped
     user: "${PUID:-1000}:${PGID:-1000}"  # Run as current user
     ports:
-      - "1880:1880"  # Node-RED Web UI / HTTPノード用
+      - "${NODERED_PORT:-1880}:1880"  # Node-RED Web UI / HTTPノード用
     volumes:
       - ./data:/data       # フローや設定の永続化
       - ./hostfiles:/hostfiles  # ホスト側ディレクトリをアクセス可能に
     environment:
       - NODE_RED_ENABLE_PROJECTS=false
-      - TZ=Asia/Tokyo  # Set timezone for accurate timestamp
+      - TZ=${TZ:-Asia/Tokyo}
+    networks:
+      - nodered_net
+    depends_on:
+      - fastapi
+      - mosquitto
+
+  fastapi:
+    build:
+      context: ./fastapi
+      dockerfile: Dockerfile
+    container_name: nodered_fastapi
+    restart: unless-stopped
+    ports:
+      - "${FASTAPI_PORT:-8000}:8000"  # FastAPI HTTP/WebSocket
+    volumes:
+      - ./fastapi/app:/app  # FastAPIアプリケーションコード
+    environment:
+      - TZ=${TZ:-Asia/Tokyo}
+      - LOG_LEVEL=${FASTAPI_LOG_LEVEL:-info}
+    networks:
+      - nodered_net
+
+  mosquitto:
+    image: eclipse-mosquitto:latest
+    container_name: nodered_mosquitto
+    restart: unless-stopped
+    ports:
+      - "${MQTT_PORT:-1883}:1883"      # MQTT
+      - "${MQTT_WS_PORT:-9001}:9001"   # MQTT over WebSocket
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
+    environment:
+      - TZ=${TZ:-Asia/Tokyo}
     networks:
       - nodered_net
 
