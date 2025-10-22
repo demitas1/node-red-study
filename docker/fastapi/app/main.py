@@ -22,7 +22,6 @@ app = FastAPI(
 
 # In-memory storage for demo purposes
 data_store: List[Dict[str, Any]] = []
-websocket_connections: List[WebSocket] = []
 
 
 # ============================================================================
@@ -63,8 +62,7 @@ async def root():
             "PUT /items/{item_id}": "Update item",
             "DELETE /items/{item_id}": "Delete item",
             "POST /echo": "Echo message back",
-            "WS /ws": "WebSocket connection",
-            "WS /ws/broadcast": "WebSocket broadcast"
+            "WS /ws": "WebSocket connection"
         }
     }
 
@@ -87,9 +85,15 @@ async def get_time():
     }
 
 
+# ============================================================================
+# Items CRUD Endpoints
+# These endpoints demonstrate basic CRUD (Create, Read, Update, Delete) operations
+# which are fundamental for learning REST API interactions with Node-RED
+# ============================================================================
+
 @app.get("/items")
 async def list_items():
-    """Get all items"""
+    """Get all items - READ operation for learning GET requests"""
     return {
         "count": len(data_store),
         "items": data_store
@@ -98,7 +102,7 @@ async def list_items():
 
 @app.post("/items")
 async def create_item(item: Item):
-    """Create a new item"""
+    """Create a new item - CREATE operation for learning POST requests with JSON body"""
     item_dict = item.model_dump()
     item_dict["id"] = len(data_store) + 1
     item_dict["created_at"] = datetime.now().isoformat()
@@ -113,7 +117,7 @@ async def create_item(item: Item):
 
 @app.get("/items/{item_id}")
 async def get_item(item_id: int):
-    """Get a specific item by ID"""
+    """Get a specific item by ID - READ operation with path parameters"""
     for item in data_store:
         if item.get("id") == item_id:
             return item
@@ -123,7 +127,7 @@ async def get_item(item_id: int):
 
 @app.put("/items/{item_id}")
 async def update_item(item_id: int, item: Item):
-    """Update an existing item"""
+    """Update an existing item - UPDATE operation for learning PUT requests"""
     for idx, stored_item in enumerate(data_store):
         if stored_item.get("id") == item_id:
             updated_item = item.model_dump()
@@ -140,7 +144,7 @@ async def update_item(item_id: int, item: Item):
 
 @app.delete("/items/{item_id}")
 async def delete_item(item_id: int):
-    """Delete an item"""
+    """Delete an item - DELETE operation for learning DELETE requests"""
     for idx, item in enumerate(data_store):
         if item.get("id") == item_id:
             deleted_item = data_store.pop(idx)
@@ -186,51 +190,6 @@ async def websocket_endpoint(websocket: WebSocket):
         logger.info("WebSocket client disconnected from /ws")
 
 
-@app.websocket("/ws/broadcast")
-async def websocket_broadcast(websocket: WebSocket):
-    """WebSocket endpoint with broadcast capability"""
-    await websocket.accept()
-    websocket_connections.append(websocket)
-    logger.info(f"WebSocket client connected to /ws/broadcast. Total: {len(websocket_connections)}")
-
-    try:
-        # Send welcome message
-        await websocket.send_json({
-            "type": "welcome",
-            "message": "Connected to broadcast channel",
-            "timestamp": datetime.now().isoformat()
-        })
-
-        while True:
-            data = await websocket.receive_text()
-            logger.info(f"Broadcasting message: {data}")
-
-            # Broadcast to all connected clients
-            broadcast_message = {
-                "type": "broadcast",
-                "message": data,
-                "timestamp": datetime.now().isoformat(),
-                "connections": len(websocket_connections)
-            }
-
-            # Send to all connected websockets
-            disconnected = []
-            for conn in websocket_connections:
-                try:
-                    await conn.send_json(broadcast_message)
-                except Exception as e:
-                    logger.error(f"Failed to send to connection: {e}")
-                    disconnected.append(conn)
-
-            # Remove disconnected clients
-            for conn in disconnected:
-                websocket_connections.remove(conn)
-
-    except WebSocketDisconnect:
-        websocket_connections.remove(websocket)
-        logger.info(f"WebSocket client disconnected from /ws/broadcast. Total: {len(websocket_connections)}")
-
-
 # ============================================================================
 # Startup/Shutdown Events
 # ============================================================================
@@ -247,6 +206,3 @@ async def startup_event():
 async def shutdown_event():
     """Cleanup on shutdown"""
     logger.info("FastAPI application shutting down")
-    # Close all websocket connections
-    for ws in websocket_connections:
-        await ws.close()

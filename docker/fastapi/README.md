@@ -5,7 +5,7 @@ Node-RED学習用のサンプルAPIサービスです。HTTP APIとWebSocketエ�
 ## 機能
 
 - RESTful API（CRUD操作）
-- WebSocketエンドポイント（エコーとブロードキャスト）
+- WebSocketエンドポイント（シンプルなエコー）
 - 自動ドキュメント生成（Swagger UI / ReDoc）
 
 ## アクセス
@@ -37,7 +37,6 @@ Node-RED学習用のサンプルAPIサービスです。HTTP APIとWebSocketエ�
 | パス | 説明 |
 |------|------|
 | `/ws` | シンプルなエコーWebSocket |
-| `/ws/broadcast` | ブロードキャスト対応WebSocket |
 
 ## 使用例
 
