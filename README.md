@@ -38,10 +38,10 @@ cd node-red-study
 | サービス | URL | 説明 |
 |---------|-----|------|
 | Node-RED | http://localhost:1880 | フロー開発環境 |
-| FastAPI | http://localhost:8000 | サンプルREST API / WebSocket |
-| FastAPI Docs | http://localhost:8000/docs | API自動ドキュメント（Swagger UI） |
+| FastAPI | http://localhost:8880 | サンプルREST API / WebSocket |
+| FastAPI Docs | http://localhost:8880/docs | API自動ドキュメント（Swagger UI） |
 | MQTT Broker | mqtt://localhost:1883 | MQTTブローカー（Mosquitto） |
-| MQTT WebSocket | ws://localhost:9001 | MQTT over WebSocket |
+| MQTT WebSocket | ws://localhost:9901 | MQTT over WebSocket |
 
 ### Node-REDからの接続
 
@@ -50,6 +50,8 @@ Node-REDフロー内からは、コンテナ名で接続できます：
 - FastAPI: `http://fastapi:8000`
 - MQTT: `mqtt://mosquitto:1883`
 - MQTT WebSocket: `ws://mosquitto:9001`
+
+**注意**: コンテナ間通信では、コンテナ内部のポート（8000, 1883, 9001）を使用します。ホスト側のポート設定（.envファイル）はホストマシンからのアクセス時のみ影響します。
 
 ## 使い方
 
@@ -153,11 +155,14 @@ cp docker/env.example docker/.env
 
 | 変数 | デフォルト値 | 説明 |
 |------|-------------|------|
-| `NODERED_PORT` | 1880 | Node-REDのポート |
-| `FASTAPI_PORT` | 8000 | FastAPIのポート |
-| `MQTT_PORT` | 1883 | MQTTブローカーのポート |
-| `MQTT_WS_PORT` | 9001 | MQTT WebSocketのポート |
+| `PUID` | 1000 | コンテナプロセスのユーザーID |
+| `PGID` | 1000 | コンテナプロセスのグループID |
 | `TZ` | Asia/Tokyo | タイムゾーン |
+| `NODERED_PORT` | 1880 | Node-REDのポート（ホスト側） |
+| `FASTAPI_PORT` | 8880 | FastAPIのポート（ホスト側） |
+| `MQTT_PORT` | 1883 | MQTTブローカーのポート（ホスト側） |
+| `MQTT_WS_PORT` | 9901 | MQTT WebSocketのポート（ホスト側） |
+| `FASTAPI_LOG_LEVEL` | info | FastAPIのログレベル |
 
 ### サービス設定
 

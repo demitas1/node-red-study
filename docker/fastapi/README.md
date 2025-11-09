@@ -12,9 +12,11 @@ Node-RED学習用のサンプルAPIサービスです。HTTP APIとWebSocketエ�
 
 サービスが起動すると、以下のURLでアクセスできます：
 
-- **API**: http://localhost:8000
-- **Swagger UI**: http://localhost:8000/docs
-- **ReDoc**: http://localhost:8000/redoc
+- **API**: http://localhost:8880
+- **Swagger UI**: http://localhost:8880/docs
+- **ReDoc**: http://localhost:8880/redoc
+
+**注意**: ポート番号は`docker/.env`の`FASTAPI_PORT`で変更できます。
 
 ## エンドポイント
 
@@ -44,18 +46,18 @@ Node-RED学習用のサンプルAPIサービスです。HTTP APIとWebSocketエ�
 
 ```bash
 # ヘルスチェック
-curl http://localhost:8000/health
+curl http://localhost:8880/health
 
 # アイテム作成
-curl -X POST http://localhost:8000/items \
+curl -X POST http://localhost:8880/items \
   -H "Content-Type: application/json" \
   -d '{"name":"Sample Item","description":"Test","price":100.0,"quantity":5}'
 
 # アイテム一覧取得
-curl http://localhost:8000/items
+curl http://localhost:8880/items
 
 # アイテム取得
-curl http://localhost:8000/items/1
+curl http://localhost:8880/items/1
 ```
 
 ### Node-REDからの接続
