@@ -2,6 +2,14 @@
 
 Docker環境でのNode-REDカスタムノード開発手順をまとめます。
 
+## 重要な制限事項
+
+**Node-REDではカスタムノードで複数の物理的な入力ポートはサポートされていません。**
+
+- `inputs`プロパティの有効な値は`0`または`1`のみです
+- 複数のデータソースを扱う場合は、単一の入力ポートに複数の配線を接続し、`msg.topic`や`msg.payload`の内容で入力を区別します
+- このガイドの`timestamp-merge`ノードは、この制限に対応した実装例です
+
 ## ディレクトリ構成
 
 ```
@@ -115,6 +123,8 @@ module.exports = function(RED) {
 
 ### nodes/timestamp-merge.html
 
+**重要**: Node-REDではカスタムノードで複数の物理的な入力ポートはサポートされていません。`inputs`の有効な値は`0`または`1`のみです。複数のデータソースを扱う場合は、`msg.topic`などで入力を区別します。
+
 ```html
 <script type="text/javascript">
     RED.nodes.registerType('timestamp-merge', {
@@ -123,14 +133,12 @@ module.exports = function(RED) {
         defaults: {
             name: {value: ""}
         },
-        inputs: 2,
+        inputs: 1,
         outputs: 1,
         icon: "font-awesome/fa-clock-o",
         label: function() {
             return this.name || "timestamp merge";
-        },
-        inputLabels: ["timestamp", "string"],
-        outputLabels: ["merged output"]
+        }
     });
 </script>
 
@@ -145,16 +153,20 @@ module.exports = function(RED) {
     <p>Merges the latest timestamp with a string</p>
     <h3>Inputs</h3>
     <dl class="message-properties">
-        <dt>Input 1 (top)</dt>
-        <dd>Receives timestamp value</dd>
-        <dt>Input 2 (bottom)</dt>
-        <dd>Receives string value</dd>
+        <dt>msg.topic <span class="property-type">string</span></dt>
+        <dd>Set to "timestamp" for timestamp messages or "string" for text messages</dd>
+        <dt>msg.payload</dt>
+        <dd>When msg.topic is "timestamp", contains the timestamp value. When msg.topic is "string", contains the text to merge.</dd>
     </dl>
     <h3>Output</h3>
     <dl class="message-properties">
-        <dt>payload</dt>
-        <dd>Object containing timestamp and text properties</dd>
+        <dt>payload <span class="property-type">object</span></dt>
+        <dd>Object containing timestamp and text properties. Only sent when a string message is received after a timestamp message.</dd>
     </dl>
+    <h3>Details</h3>
+    <p>This node stores the most recent timestamp message and combines it with incoming string messages.</p>
+    <p>Send messages with <code>msg.topic = "timestamp"</code> to update the stored timestamp.</p>
+    <p>Send messages with <code>msg.topic = "string"</code> to trigger output with the latest timestamp.</p>
 </script>
 ```
 
@@ -554,20 +566,25 @@ docker compose restart nodered
 以下のフローを作成してテストします：
 
 ```
-[inject (timestamp)] → [timestamp merge] → [debug]
-                ↑
-[inject (string)]
+[inject (timestamp)] ─┐
+                      ├→ [timestamp merge] → [debug]
+[inject (string)]     ─┘
 ```
 
 **手順**:
-1. Inject ノード（上）を配置し、`msg.payload` を `timestamp` に設定
-2. Inject ノード（下）を配置し、`msg.payload` を文字列（例: "Hello"）に設定
+1. **Inject ノード（上）を配置し、以下を設定:**
+   - `msg.payload`: `timestamp`（タイムスタンプ型）
+   - `msg.topic`: `timestamp`（文字列型）← **重要**
+2. **Inject ノード（下）を配置し、以下を設定:**
+   - `msg.payload`: `Hello`（文字列型）
+   - `msg.topic`: `string`（文字列型）← **重要**
 3. timestamp merge ノードを配置
 4. Debug ノードを配置
-5. 接続してデプロイ
-6. 上のInjectボタンをクリック（タイムスタンプを送信）
-7. 下のInjectボタンをクリック（文字列を送信）
-8. Debugパネルで `{timestamp: ..., text: "Hello"}` が表示されることを確認
+5. 両方のInjectノードを timestamp merge ノードに接続
+6. デプロイ
+7. 上のInjectボタンをクリック（タイムスタンプを送信）→ ノードのステータスが "timestamp updated" になる
+8. 下のInjectボタンをクリック（文字列を送信）→ ノードのステータスが "sent" になる
+9. Debugパネルで `{timestamp: 1234567890, text: "Hello"}` のようなオブジェクトが表示されることを確認
 
 ### 4. data-filter ノードのテスト
 

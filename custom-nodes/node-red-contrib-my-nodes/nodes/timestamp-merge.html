@@ -1,0 +1,42 @@
+<script type="text/javascript">
+    RED.nodes.registerType('timestamp-merge', {
+        category: 'custom',
+        color: '#a6bbcf',
+        defaults: {
+            name: {value: ""}
+        },
+        inputs: 1,
+        outputs: 1,
+        icon: "font-awesome/fa-clock-o",
+        label: function() {
+            return this.name || "timestamp merge";
+        }
+    });
+</script>
+
+<script type="text/html" data-template-name="timestamp-merge">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+</script>
+
+<script type="text/html" data-help-name="timestamp-merge">
+    <p>Merges the latest timestamp with a string</p>
+    <h3>Inputs</h3>
+    <dl class="message-properties">
+        <dt>msg.topic <span class="property-type">string</span></dt>
+        <dd>Set to "timestamp" for timestamp messages or "string" for text messages</dd>
+        <dt>msg.payload</dt>
+        <dd>When msg.topic is "timestamp", contains the timestamp value. When msg.topic is "string", contains the text to merge.</dd>
+    </dl>
+    <h3>Output</h3>
+    <dl class="message-properties">
+        <dt>payload <span class="property-type">object</span></dt>
+        <dd>Object containing timestamp and text properties. Only sent when a string message is received after a timestamp message.</dd>
+    </dl>
+    <h3>Details</h3>
+    <p>This node stores the most recent timestamp message and combines it with incoming string messages.</p>
+    <p>Send messages with <code>msg.topic = "timestamp"</code> to update the stored timestamp.</p>
+    <p>Send messages with <code>msg.topic = "string"</code> to trigger output with the latest timestamp.</p>
+</script>

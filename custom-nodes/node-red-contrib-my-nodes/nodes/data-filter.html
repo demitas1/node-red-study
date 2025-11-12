@@ -1,0 +1,46 @@
+<script type="text/javascript">
+    RED.nodes.registerType('data-filter', {
+        category: 'custom',
+        color: '#e9967a',
+        defaults: {
+            name: {value: ""},
+            threshold: {value: 0, required: true, validate: RED.validators.number()}
+        },
+        inputs: 1,
+        outputs: 1,
+        icon: "font-awesome/fa-filter",
+        label: function() {
+            return this.name || "data filter";
+        }
+    });
+</script>
+
+<script type="text/html" data-template-name="data-filter">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-threshold"><i class="fa fa-filter"></i> Threshold</label>
+        <input type="number" id="node-input-threshold" placeholder="0">
+    </div>
+</script>
+
+<script type="text/html" data-help-name="data-filter">
+    <p>Filters values above a threshold</p>
+    <h3>Configuration</h3>
+    <dl class="message-properties">
+        <dt>Threshold</dt>
+        <dd>Only values greater than this threshold will pass through</dd>
+    </dl>
+    <h3>Input</h3>
+    <dl class="message-properties">
+        <dt>payload <span class="property-type">number</span></dt>
+        <dd>Numeric value to filter</dd>
+    </dl>
+    <h3>Output</h3>
+    <dl class="message-properties">
+        <dt>payload <span class="property-type">number</span></dt>
+        <dd>Only sent if value is greater than threshold</dd>
+    </dl>
+</script>

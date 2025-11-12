@@ -11,6 +11,9 @@ docker/.env
 docker/mosquitto/data/
 docker/mosquitto/log/
 
+# Custom nodes
+custom-nodes/*/node_modules/
+
 # Python cache
 __pycache__/
 *.pyc

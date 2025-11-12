@@ -9,6 +9,7 @@ services:
     volumes:
       - ./data:/data       # フローや設定の永続化
       - ./hostfiles:/hostfiles  # ホスト側ディレクトリをアクセス可能に
+      - ../custom-nodes/node-red-contrib-my-nodes:/custom-nodes/node-red-contrib-my-nodes  # カスタムノード開発用
     environment:
       - NODE_RED_ENABLE_PROJECTS=false
       - TZ=${TZ:-Asia/Tokyo}

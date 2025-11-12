@@ -1,0 +1,17 @@
+{
+  "name": "node-red-contrib-my-nodes",
+  "version": "0.1.0",
+  "description": "Custom nodes for Node-RED",
+  "keywords": [
+    "node-red",
+    "custom"
+  ],
+  "author": "DEMI",
+  "license": "Apache-2.0",
+  "node-red": {
+    "nodes": {
+      "timestamp-merge": "nodes/timestamp-merge.js",
+      "data-filter": "nodes/data-filter.js"
+    }
+  }
+}

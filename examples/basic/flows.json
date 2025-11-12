@@ -25,14 +25,14 @@
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
-        "topic": "",
+        "topic": "message",
         "payload": "Hello, world",
         "payloadType": "str",
-        "x": 270,
+        "x": 300,
         "y": 140,
         "wires": [
             [
-                "7995f9594f2513c6"
+                "cdc7fb244b0d6b18"
             ]
         ]
     },
@@ -40,16 +40,84 @@
         "id": "7995f9594f2513c6",
         "type": "debug",
         "z": "654b09e09e4708df",
-        "name": "debug 1",
+        "name": "topic",
         "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "false",
+        "complete": "topic",
+        "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 640,
+        "x": 750,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "cdc7fb244b0d6b18",
+        "type": "function",
+        "z": "654b09e09e4708df",
+        "name": "function 1",
+        "func": "if (msg.topic === \"message\") {\n    context.set(\"message\", msg.payload);\n}\nif (msg.topic === \"timestamp\") {\n    context.set(\"timestamp\", msg.payload);\n}\n\nlet msg_out = {\n    payload: {\n        message: context.get(\"message\"),\n        timestamp: context.get(\"timestamp\"),\n    }\n};\n\nreturn msg_out;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 520,
         "y": 140,
+        "wires": [
+            [
+                "7995f9594f2513c6",
+                "d60e18d439272bc3"
+            ]
+        ]
+    },
+    {
+        "id": "a05873406f5ed891",
+        "type": "inject",
+        "z": "654b09e09e4708df",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "timestamp",
+        "payload": "",
+        "payloadType": "date",
+        "x": 300,
+        "y": 220,
+        "wires": [
+            [
+                "cdc7fb244b0d6b18"
+            ]
+        ]
+    },
+    {
+        "id": "d60e18d439272bc3",
+        "type": "debug",
+        "z": "654b09e09e4708df",
+        "name": "payload",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 760,
+        "y": 220,
         "wires": []
     }
 ]
