@@ -123,6 +123,14 @@ docker compose logs -f nodered
 │       ├── config/          # Mosquitto設定
 │       ├── data/            # MQTTデータ（永続化）
 │       └── log/             # MQTTログ
+├── custom-nodes/           # カスタムノード開発（TypeScript）
+│   └── node-red-contrib-my-nodes/
+│       ├── package.json     # TypeScript設定、ビルドスクリプト
+│       ├── tsconfig.json    # TypeScript設定
+│       ├── src/             # TypeScriptソース
+│       │   └── nodes/       # ノード実装（.ts, .html）
+│       ├── dist/            # ビルド成果物（Git除外）
+│       └── icons/           # ノードアイコン
 ├── examples/               # 学習用サンプルフロー
 │   ├── README.md           # サンプル一覧と使い方
 │   ├── basic/              # 基本サンプル
@@ -132,10 +140,15 @@ docker compose logs -f nodered
 ├── scripts/
 │   ├── start.sh            # Node-REDを起動
 │   ├── stop.sh             # Node-REDを停止
-│   └── reset.sh            # すべてのデータをリセット・削除
+│   ├── reset.sh            # すべてのデータをリセット・削除
+│   ├── build-custom-nodes.sh    # カスタムノードをビルド（TypeScript）
+│   ├── install-custom-nodes.sh  # カスタムノードをインストール
+│   └── reload-custom-nodes.sh   # カスタムノードを再読み込み
 ├── docs/                   # ドキュメント
-│   ├── node-red-usage-guide.md        # Node-RED使い方ガイド
-│   └── examples-implementation-plan.md # サンプル実装計画
+│   ├── node-red-usage-guide.md              # Node-RED使い方ガイド
+│   ├── custom-node-development-typescript.md # カスタムノード開発ガイド（TypeScript）
+│   ├── custom-node-development.md           # カスタムノード開発ガイド（JavaScript、参考）
+│   └── examples-implementation-plan.md      # サンプル実装計画
 ├── README.md               # このファイル
 └── LICENSE                 # MITライセンス
 ```
@@ -188,6 +201,42 @@ cp docker/env.example docker/.env
 - `node_modules/` - npmでインストールされたカスタムノード
 
 `docker/hostfiles/` ディレクトリは、ホストシステムとNode-RED間でファイルを共有するために使用できます。
+
+## カスタムノード開発
+
+このプロジェクトでは、TypeScriptを使用してNode-REDのカスタムノードを開発できます。
+
+### クイックスタート
+
+```bash
+# カスタムノードをビルド
+./scripts/build-custom-nodes.sh
+
+# カスタムノードをインストール
+./scripts/install-custom-nodes.sh
+
+# カスタムノードを修正後、再読み込み
+./scripts/reload-custom-nodes.sh
+```
+
+### 開発環境
+
+- **言語**: TypeScript
+- **ソース**: `custom-nodes/node-red-contrib-my-nodes/src/nodes/`
+- **ビルド成果物**: `custom-nodes/node-red-contrib-my-nodes/dist/nodes/`
+
+### 詳細ガイド
+
+カスタムノード開発の詳細は以下のドキュメントを参照してください：
+
+- **[TypeScript開発ガイド](docs/custom-node-development-typescript.md)** - 推奨
+  - TypeScript環境のセットアップ
+  - 型定義とベストプラクティス
+  - サンプル実装（data-filter, timestamp-merge）
+  - トラブルシューティング
+
+- **[JavaScript開発ガイド](docs/custom-node-development.md)** - 参考
+  - JavaScript版の開発手順（レガシー）
 
 ## ライセンス
 
