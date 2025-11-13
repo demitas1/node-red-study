@@ -5,8 +5,10 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 DOCKER_DIR="$PROJECT_ROOT/docker"
+CUSTOM_NODES_DIR="$PROJECT_ROOT/custom-nodes/node-red-contrib-my-nodes"
 
 echo "Installing custom nodes..."
+echo ""
 
 # Check if container is running
 if ! docker ps | grep -q nodered; then
@@ -15,12 +17,19 @@ if ! docker ps | grep -q nodered; then
     exit 1
 fi
 
+# Build TypeScript first
+echo "Step 1/3: Building TypeScript..."
+cd "$CUSTOM_NODES_DIR"
+npm run build
+echo ""
+
 # Install custom nodes in container
-echo "Running npm install in container..."
-docker exec -it nodered bash -c "cd /data && npm install /custom-nodes/node-red-contrib-my-nodes"
+echo "Step 2/3: Running npm install in container..."
+docker exec -i nodered bash -c "cd /data && npm install /custom-nodes/node-red-contrib-my-nodes"
+echo ""
 
 # Restart Node-RED
-echo "Restarting Node-RED..."
+echo "Step 3/3: Restarting Node-RED..."
 cd "$DOCKER_DIR"
 docker compose restart nodered
 
