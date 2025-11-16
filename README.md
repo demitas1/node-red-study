@@ -239,18 +239,12 @@ cp docker/env.example docker/.env
 
 このプロジェクトには以下のカスタムノードが含まれています：
 
-1. **data-filter** - データフィルタリングノード
-   - 設定した条件に基づいてメッセージをフィルタリング
-
-2. **timestamp-merge** - タイムスタンプマージノード
-   - 複数のデータソースをタイムスタンプでマージ
-
-3. **tokyo-weather** - 東京天気情報取得ノード
+1. **tokyo-weather** - 東京天気情報取得ノード
    - Open-Meteo APIから東京の現在の天気情報を定期的に取得
    - 気温、湿度、天気コード、風速などをJSON形式で出力
    - デフォルト10秒間隔で自動更新
 
-4. **weather-formatter** - 天気情報フォーマットノード
+2. **weather-formatter** - 天気情報フォーマットノード
    - tokyo-weatherノードの出力を読みやすい日本語形式に変換
    - 時刻、日付、天気情報を日本語テキストとして出力
    - 天気コードを日本語の天気説明に変換（快晴、晴れ、曇り、雨など）
@@ -262,7 +256,7 @@ cp docker/env.example docker/.env
 - **[TypeScript開発ガイド](docs/custom-node-development-typescript.md)** - 推奨
   - TypeScript環境のセットアップ
   - 型定義とベストプラクティス
-  - サンプル実装（data-filter, timestamp-merge, tokyo-weather, weather-formatter）
+  - サンプル実装（tokyo-weather, weather-formatter）
   - トラブルシューティング
 
 - **[JavaScript開発ガイド](docs/custom-node-development.md)** - 参考

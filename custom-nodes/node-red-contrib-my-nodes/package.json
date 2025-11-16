@@ -18,8 +18,6 @@
   },
   "node-red": {
     "nodes": {
-      "timestamp-merge": "dist/nodes/timestamp-merge.js",
-      "data-filter": "dist/nodes/data-filter.js",
       "tokyo-weather": "dist/nodes/tokyo-weather.js",
       "weather-formatter": "dist/nodes/weather-formatter.js"
     }
