@@ -155,7 +155,6 @@ docker compose logs -f nodered
 ├── docs/                   # ドキュメント
 │   ├── node-red-usage-guide.md              # Node-RED使い方ガイド
 │   ├── custom-node-development-typescript.md # カスタムノード開発ガイド（TypeScript）
-│   ├── custom-node-development.md           # カスタムノード開発ガイド（JavaScript、参考）
 │   ├── examples-implementation-plan.md      # サンプル実装計画
 │   ├── example-mqtt.md                      # MQTT使用例
 │   └── example-websocket.md                 # WebSocket使用例
@@ -253,14 +252,11 @@ cp docker/env.example docker/.env
 
 カスタムノード開発の詳細は以下のドキュメントを参照してください：
 
-- **[TypeScript開発ガイド](docs/custom-node-development-typescript.md)** - 推奨
+- **[TypeScript開発ガイド](docs/custom-node-development-typescript.md)**
   - TypeScript環境のセットアップ
   - 型定義とベストプラクティス
   - サンプル実装（tokyo-weather, weather-formatter）
   - トラブルシューティング
-
-- **[JavaScript開発ガイド](docs/custom-node-development.md)** - 参考
-  - JavaScript版の開発手順（レガシー）
 
 ## ライセンス
 
