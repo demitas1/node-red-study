@@ -57,6 +57,8 @@ Node-REDフロー内からは、コンテナ名で接続できます：
 
 Node-REDの基本的な操作方法（フロー削除、デプロイ、プロジェクト機能など）については、[Node-RED使い方ガイド](docs/node-red-usage-guide.md)を参照してください。
 
+MQTTブローカーの使用方法と温度センサーシミュレーターについては、[MQTT使用例](docs/example-mqtt.md)を参照してください。
+
 ### Node-REDの起動
 ```bash
 ./scripts/start.sh
@@ -143,12 +145,17 @@ docker compose logs -f nodered
 │   ├── reset.sh            # すべてのデータをリセット・削除
 │   ├── build-custom-nodes.sh    # カスタムノードをビルド（TypeScript）
 │   ├── install-custom-nodes.sh  # カスタムノードをインストール
-│   └── reload-custom-nodes.sh   # カスタムノードを再読み込み
+│   ├── reload-custom-nodes.sh   # カスタムノードを再読み込み
+│   ├── start-temperature-simulator.sh  # 温度センサーシミュレーター起動
+│   └── simulation/         # シミュレーションスクリプト
+│       └── mosquitto/      # Mosquittoコンテナ内で実行されるスクリプト
+│           └── temperature-sensor.sh  # 温度センサーシミュレーター
 ├── docs/                   # ドキュメント
 │   ├── node-red-usage-guide.md              # Node-RED使い方ガイド
 │   ├── custom-node-development-typescript.md # カスタムノード開発ガイド（TypeScript）
 │   ├── custom-node-development.md           # カスタムノード開発ガイド（JavaScript、参考）
-│   └── examples-implementation-plan.md      # サンプル実装計画
+│   ├── examples-implementation-plan.md      # サンプル実装計画
+│   └── example-mqtt.md                      # MQTT使用例
 ├── README.md               # このファイル
 └── LICENSE                 # MITライセンス
 ```

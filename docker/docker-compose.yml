@@ -46,6 +46,7 @@ services:
       - ./mosquitto/config:/mosquitto/config
       - ./mosquitto/data:/mosquitto/data
       - ./mosquitto/log:/mosquitto/log
+      - ../scripts/simulation/mosquitto:/scripts:ro  # Simulation scripts
     environment:
       - TZ=${TZ:-Asia/Tokyo}
     networks:
