@@ -1,0 +1,105 @@
+<script type="text/javascript">
+  RED.nodes.registerType('tokyo-weather', {
+    category: 'custom',
+    color: '#87CEEB',
+    defaults: {
+      name: { value: '' },
+      interval: { value: 10, required: true, validate: RED.validators.number() }
+    },
+    inputs: 0,
+    outputs: 1,
+    icon: 'font-awesome/fa-cloud',
+    label: function() {
+      return this.name || 'Tokyo Weather';
+    },
+    labelStyle: function() {
+      return this.name ? 'node_label_italic' : '';
+    },
+    oneditprepare: function() {
+      $('#node-input-interval').val(this.interval || 10);
+    }
+  });
+</script>
+
+<script type="text/html" data-template-name="tokyo-weather">
+  <div class="form-row">
+    <label for="node-input-interval"><i class="fa fa-clock-o"></i> Interval</label>
+    <input type="number" id="node-input-interval" placeholder="10" min="1" style="width: 100px;">
+    <span style="margin-left: 5px;">seconds</span>
+  </div>
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Tokyo Weather">
+  </div>
+</script>
+
+<script type="text/html" data-help-name="tokyo-weather">
+  <p>Fetches current weather data for Tokyo from Open-Meteo API at regular intervals.</p>
+
+  <h3>Outputs</h3>
+  <dl class="message-properties">
+    <dt>payload <span class="property-type">object</span></dt>
+    <dd>Weather data object containing location and current weather information.</dd>
+    <dt>topic <span class="property-type">string</span></dt>
+    <dd>Set to "weather/tokyo/current".</dd>
+  </dl>
+
+  <h3>Configuration</h3>
+  <dl class="message-properties">
+    <dt>Interval <span class="property-type">number</span></dt>
+    <dd>Time interval in seconds between weather data fetches. Default is 10 seconds.</dd>
+    <dt>Name <span class="property-type">string</span></dt>
+    <dd>Optional name for the node.</dd>
+  </dl>
+
+  <h3>Output Format</h3>
+  <p>The <code>msg.payload</code> contains:</p>
+  <pre>{
+  "location": {
+    "city": "Tokyo",
+    "latitude": 35.6895,
+    "longitude": 139.6917,
+    "timezone": "Asia/Tokyo"
+  },
+  "current": {
+    "time": "2025-11-16T18:00",
+    "temperature": 15.5,
+    "humidity": 65,
+    "weatherCode": 3,
+    "weatherDescription": "Overcast",
+    "windSpeed": 12.5,
+    "windDirection": 180
+  },
+  "fetchedAt": "2025-11-16T18:00:00+09:00"
+}</pre>
+
+  <h3>Weather Variables</h3>
+  <ul>
+    <li><b>temperature</b> - Air temperature at 2 meters height (°C)</li>
+    <li><b>humidity</b> - Relative humidity at 2 meters height (%)</li>
+    <li><b>weatherCode</b> - WMO Weather interpretation code</li>
+    <li><b>weatherDescription</b> - Human-readable weather description</li>
+    <li><b>windSpeed</b> - Wind speed at 10 meters height (km/h)</li>
+    <li><b>windDirection</b> - Wind direction at 10 meters height (degrees)</li>
+  </ul>
+
+  <h3>Weather Codes</h3>
+  <table>
+    <tr><th>Code</th><th>Description</th></tr>
+    <tr><td>0</td><td>Clear sky</td></tr>
+    <tr><td>1, 2, 3</td><td>Mainly clear, Partly cloudy, Overcast</td></tr>
+    <tr><td>45, 48</td><td>Fog</td></tr>
+    <tr><td>51, 53, 55</td><td>Drizzle (light, moderate, dense)</td></tr>
+    <tr><td>61, 63, 65</td><td>Rain (slight, moderate, heavy)</td></tr>
+    <tr><td>71, 73, 75</td><td>Snow (slight, moderate, heavy)</td></tr>
+    <tr><td>95</td><td>Thunderstorm</td></tr>
+  </table>
+
+  <h3>Details</h3>
+  <p>This node uses the Open-Meteo API (https://open-meteo.com) which is free and does not require an API key.</p>
+  <p>Weather data is updated every 15 minutes by the API. The node will fetch data at the configured interval.</p>
+  <p>The node status displays the current temperature and humidity.</p>
+
+  <h3>Error Handling</h3>
+  <p>If the API request fails, the node will display an error status. Check the debug panel for error details.</p>
+</script>
