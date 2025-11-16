@@ -59,6 +59,8 @@ Node-REDの基本的な操作方法（フロー削除、デプロイ、プロジ
 
 MQTTブローカーの使用方法と温度センサーシミュレーターについては、[MQTT使用例](docs/example-mqtt.md)を参照してください。
 
+WebSocketの使用方法とFastAPIエコーエンドポイントについては、[WebSocket使用例](docs/example-websocket.md)を参照してください。
+
 ### Node-REDの起動
 ```bash
 ./scripts/start.sh
@@ -155,7 +157,8 @@ docker compose logs -f nodered
 │   ├── custom-node-development-typescript.md # カスタムノード開発ガイド（TypeScript）
 │   ├── custom-node-development.md           # カスタムノード開発ガイド（JavaScript、参考）
 │   ├── examples-implementation-plan.md      # サンプル実装計画
-│   └── example-mqtt.md                      # MQTT使用例
+│   ├── example-mqtt.md                      # MQTT使用例
+│   └── example-websocket.md                 # WebSocket使用例
 ├── README.md               # このファイル
 └── LICENSE                 # MITライセンス
 ```
@@ -232,6 +235,26 @@ cp docker/env.example docker/.env
 - **ソース**: `custom-nodes/node-red-contrib-my-nodes/src/nodes/`
 - **ビルド成果物**: `custom-nodes/node-red-contrib-my-nodes/dist/nodes/`
 
+### 提供されているカスタムノード
+
+このプロジェクトには以下のカスタムノードが含まれています：
+
+1. **data-filter** - データフィルタリングノード
+   - 設定した条件に基づいてメッセージをフィルタリング
+
+2. **timestamp-merge** - タイムスタンプマージノード
+   - 複数のデータソースをタイムスタンプでマージ
+
+3. **tokyo-weather** - 東京天気情報取得ノード
+   - Open-Meteo APIから東京の現在の天気情報を定期的に取得
+   - 気温、湿度、天気コード、風速などをJSON形式で出力
+   - デフォルト10秒間隔で自動更新
+
+4. **weather-formatter** - 天気情報フォーマットノード
+   - tokyo-weatherノードの出力を読みやすい日本語形式に変換
+   - 時刻、日付、天気情報を日本語テキストとして出力
+   - 天気コードを日本語の天気説明に変換（快晴、晴れ、曇り、雨など）
+
 ### 詳細ガイド
 
 カスタムノード開発の詳細は以下のドキュメントを参照してください：
@@ -239,7 +262,7 @@ cp docker/env.example docker/.env
 - **[TypeScript開発ガイド](docs/custom-node-development-typescript.md)** - 推奨
   - TypeScript環境のセットアップ
   - 型定義とベストプラクティス
-  - サンプル実装（data-filter, timestamp-merge）
+  - サンプル実装（data-filter, timestamp-merge, tokyo-weather, weather-formatter）
   - トラブルシューティング
 
 - **[JavaScript開発ガイド](docs/custom-node-development.md)** - 参考

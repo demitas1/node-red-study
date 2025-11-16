@@ -1,0 +1,85 @@
+<script type="text/javascript">
+  RED.nodes.registerType('weather-formatter', {
+    category: 'custom',
+    color: '#FFA07A',
+    defaults: {
+      name: { value: '' }
+    },
+    inputs: 1,
+    outputs: 1,
+    icon: 'font-awesome/fa-file-text-o',
+    label: function() {
+      return this.name || 'Weather Formatter';
+    },
+    labelStyle: function() {
+      return this.name ? 'node_label_italic' : '';
+    }
+  });
+</script>
+
+<script type="text/html" data-template-name="weather-formatter">
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Weather Formatter">
+  </div>
+</script>
+
+<script type="text/html" data-help-name="weather-formatter">
+  <p>Formats tokyo-weather node output into readable Japanese text.</p>
+
+  <h3>Inputs</h3>
+  <dl class="message-properties">
+    <dt>payload <span class="property-type">object</span></dt>
+    <dd>Output from tokyo-weather node containing weather data.</dd>
+  </dl>
+
+  <h3>Outputs</h3>
+  <dl class="message-properties">
+    <dt>payload <span class="property-type">object</span></dt>
+    <dd>Formatted weather information in Japanese.</dd>
+  </dl>
+
+  <h3>Output Format</h3>
+  <p>The <code>msg.payload</code> contains:</p>
+  <pre>{
+  "time": "19:30",
+  "date": "2025年11月16日",
+  "weather_info_text": "気温: 14.1°C、湿度: 65%、天気: 曇り"
+}</pre>
+
+  <h3>Fields</h3>
+  <ul>
+    <li><b>time</b> - Time in HH:MM format (24-hour)</li>
+    <li><b>date</b> - Date in Japanese format (YYYY年MM月DD日)</li>
+    <li><b>weather_info_text</b> - Readable Japanese text with temperature, humidity, and weather condition</li>
+  </ul>
+
+  <h3>Weather Translation</h3>
+  <table>
+    <tr><th>Code</th><th>English</th><th>Japanese</th></tr>
+    <tr><td>0</td><td>Clear sky</td><td>快晴</td></tr>
+    <tr><td>1</td><td>Mainly clear</td><td>晴れ</td></tr>
+    <tr><td>2</td><td>Partly cloudy</td><td>薄曇り</td></tr>
+    <tr><td>3</td><td>Overcast</td><td>曇り</td></tr>
+    <tr><td>45, 48</td><td>Fog</td><td>霧</td></tr>
+    <tr><td>51-55</td><td>Drizzle</td><td>霧雨</td></tr>
+    <tr><td>61-65</td><td>Rain</td><td>雨</td></tr>
+    <tr><td>71-75</td><td>Snow</td><td>雪</td></tr>
+    <tr><td>95</td><td>Thunderstorm</td><td>雷雨</td></tr>
+  </table>
+
+  <h3>Usage</h3>
+  <p>Connect this node after a tokyo-weather node to get formatted Japanese output.</p>
+  <p>Example flow: <code>[tokyo-weather] → [weather-formatter] → [debug]</code></p>
+
+  <h3>Error Handling</h3>
+  <p>If the input is invalid or missing required fields, the node will:</p>
+  <ul>
+    <li>Display an error status (red ring)</li>
+    <li>Send an error message to the debug panel</li>
+    <li>Not send any output message</li>
+  </ul>
+
+  <h3>Details</h3>
+  <p>This node extracts only the essential weather information (time, temperature, humidity, weather code) from tokyo-weather node output and formats it into human-readable Japanese text.</p>
+</script>
