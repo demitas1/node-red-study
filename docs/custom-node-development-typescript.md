@@ -43,9 +43,6 @@ custom-nodes/node-red-contrib-my-nodes/
 │       └── *.html         # フロントエンド定義
 ├── dist/                   # ビルド成果物（Git除外）
 │   └── nodes/
-│       ├── *.js
-│       ├── *.html
-│       └── *.js.map
 └── icons/
 ```
 
