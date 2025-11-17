@@ -195,7 +195,9 @@ https://comfyanonymous.github.io/ComfyUI_examples/controlnet/
 
 https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-06-puzzles-moving-platforms-in-unreal-engine
 
-![Blueprint](./images/blueprint-moving_platform.png)
+![Blueprint example](./images/blueprint-43-gif.gif)
+
+![Blueprint flow](./images/blueprint-moving_platform.png)
 
 
 ## まとめ
