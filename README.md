@@ -55,11 +55,12 @@ Node-REDフロー内からは、コンテナ名で接続できます：
 
 ## 使い方
 
-Node-REDの基本的な操作方法（フロー削除、デプロイ、プロジェクト機能など）については、[Node-RED使い方ガイド](docs/node-red-usage-guide.md)を参照してください。
+### ドキュメント
 
-MQTTブローカーの使用方法と温度センサーシミュレーターについては、[MQTT使用例](docs/example-mqtt.md)を参照してください。
-
-WebSocketの使用方法とFastAPIエコーエンドポイントについては、[WebSocket使用例](docs/example-websocket.md)を参照してください。
+- **[基本的なフローの例](docs/example-basic.md)** - Inject、Function、Debugノードの基本的な使い方とコンテキストの説明
+- **[Node-RED使い方ガイド](docs/node-red-usage-guide.md)** - フロー削除、デプロイ、プロジェクト機能など
+- **[MQTT使用例](docs/example-mqtt.md)** - MQTTブローカーの使用方法と温度センサーシミュレーター
+- **[WebSocket使用例](docs/example-websocket.md)** - WebSocketの使用方法とFastAPIエコーエンドポイント
 
 ### Node-REDの起動
 ```bash
@@ -92,22 +93,21 @@ docker compose logs -f nodered
 
 このリポジトリには、Node-REDの学習用サンプルフローが含まれています（`examples/` ディレクトリ）。
 
-### カテゴリ
+### 利用可能なサンプル
 
-- **基本（basic）** - Hello World、タイマー、デバッグ出力など
-- **HTTP** - API作成、RESTクライアント、Webhookなど
-- **データ処理（data-processing）** - JSON変換、CSVパース、データ変換など
-- **連携（integration）** - ファイル操作、外部API、MQTT、メール通知など
+- **basic_flow.json** - 基本的なフロー（Hello World、Functionノード、コンテキスト）
+- **mqtt_websocket_example.json** - MQTTとWebSocketの使用例
+- **custom_node_example.json** - カスタムノード（tokyo-weather、weather-formatter）の使用例
 
 ### サンプルの使い方
 
 1. `examples/` ディレクトリから使いたいサンプルを選択
-2. `flow.json` ファイルの内容をコピー
+2. JSONファイルの内容をコピー
 3. Node-RED UIでメニュー（☰）→ インポートを選択
 4. JSONを貼り付けてインポート
 5. デプロイして実行
 
-詳細は [examples/README.md](examples/README.md) を参照してください。
+各サンプルの詳細は、対応するドキュメント（`docs/example-*.md`）を参照してください。
 
 ## ディレクトリ構造
 
@@ -127,7 +127,7 @@ docker compose logs -f nodered
 │       ├── config/          # Mosquitto設定
 │       ├── data/            # MQTTデータ（永続化）
 │       └── log/             # MQTTログ
-├── custom-nodes/           # カスタムノード開発（TypeScript）
+├── custom-nodes/            # カスタムノード開発（TypeScript）
 │   └── node-red-contrib-my-nodes/
 │       ├── package.json     # TypeScript設定、ビルドスクリプト
 │       ├── tsconfig.json    # TypeScript設定
@@ -135,31 +135,32 @@ docker compose logs -f nodered
 │       │   └── nodes/       # ノード実装（.ts, .html）
 │       ├── dist/            # ビルド成果物（Git除外）
 │       └── icons/           # ノードアイコン
-├── examples/               # 学習用サンプルフロー
-│   ├── README.md           # サンプル一覧と使い方
-│   ├── basic/              # 基本サンプル
-│   ├── http/               # HTTPサンプル
-│   ├── data-processing/    # データ処理サンプル
-│   └── integration/        # 連携サンプル
+├── examples/                # 学習用サンプルフロー
+│   ├── basic_flow.json      # 基本的なフロー例
+│   ├── mqtt_websocket_example.json  # MQTT & WebSocket例
+│   └── custom_node_example.json     # カスタムノード使用例
 ├── scripts/
-│   ├── start.sh            # Node-REDを起動
-│   ├── stop.sh             # Node-REDを停止
-│   ├── reset.sh            # すべてのデータをリセット・削除
-│   ├── build-custom-nodes.sh    # カスタムノードをビルド（TypeScript）
-│   ├── install-custom-nodes.sh  # カスタムノードをインストール
-│   ├── reload-custom-nodes.sh   # カスタムノードを再読み込み
+│   ├── start.sh             # Node-REDを起動
+│   ├── stop.sh              # Node-REDを停止
+│   ├── reset.sh             # すべてのデータをリセット・削除
+│   ├── build-custom-nodes.sh         # カスタムノードをビルド（TypeScript）
+│   ├── install-custom-nodes.sh       # カスタムノードをインストール
+│   ├── reload-custom-nodes.sh        # カスタムノードを再読み込み
 │   ├── start-temperature-simulator.sh  # 温度センサーシミュレーター起動
-│   └── simulation/         # シミュレーションスクリプト
-│       └── mosquitto/      # Mosquittoコンテナ内で実行されるスクリプト
+│   └── simulation/          # シミュレーションスクリプト
+│       └── mosquitto/       # Mosquittoコンテナ内で実行されるスクリプト
 │           └── temperature-sensor.sh  # 温度センサーシミュレーター
-├── docs/                   # ドキュメント
-│   ├── node-red-usage-guide.md              # Node-RED使い方ガイド
-│   ├── custom-node-development-typescript.md # カスタムノード開発ガイド（TypeScript）
-│   ├── examples-implementation-plan.md      # サンプル実装計画
-│   ├── example-mqtt.md                      # MQTT使用例
-│   └── example-websocket.md                 # WebSocket使用例
-├── README.md               # このファイル
-└── LICENSE                 # MITライセンス
+├── docs/                    # ドキュメント
+│   ├── images/              # ドキュメント用画像
+│   ├── example-basic.md     # 基本的なフローの例
+│   ├── example-mqtt.md      # MQTT使用例
+│   ├── example-websocket.md # WebSocket使用例
+│   ├── node-red-usage-guide.md                # Node-RED使い方ガイド
+│   ├── custom-node-development-typescript.md  # カスタムノード開発ガイド（TypeScript）
+│   └── node-based-programming-introduction.md # ノードベースプログラミング入門
+├── README.md                # このファイル
+├── CLAUDE.md                # Claude Code用プロジェクトガイド
+└── LICENSE                  # MITライセンス
 ```
 
 ## 設定

@@ -1,0 +1,176 @@
+[
+    {
+        "id": "5a71bb56b7d15f27",
+        "type": "tab",
+        "label": "MQTT & Websocket",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "06e76cb25ee6d321",
+        "type": "mqtt in",
+        "z": "5a71bb56b7d15f27",
+        "name": "",
+        "topic": "room/temperature",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "99c9e6d12af56999",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 250,
+        "y": 140,
+        "wires": [
+            [
+                "d3cc412d17f8b069"
+            ]
+        ]
+    },
+    {
+        "id": "d3cc412d17f8b069",
+        "type": "json",
+        "z": "5a71bb56b7d15f27",
+        "name": "",
+        "property": "payload",
+        "action": "obj",
+        "pretty": false,
+        "x": 470,
+        "y": 140,
+        "wires": [
+            [
+                "19bd4e69157eee54"
+            ]
+        ]
+    },
+    {
+        "id": "19bd4e69157eee54",
+        "type": "debug",
+        "z": "5a71bb56b7d15f27",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 720,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "fc883342233b614b",
+        "type": "websocket in",
+        "z": "5a71bb56b7d15f27",
+        "name": "",
+        "server": "",
+        "client": "fd98ea4216df46bc",
+        "x": 280,
+        "y": 480,
+        "wires": [
+            [
+                "5ff8805e6b162f2f"
+            ]
+        ]
+    },
+    {
+        "id": "5ff8805e6b162f2f",
+        "type": "debug",
+        "z": "5a71bb56b7d15f27",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 720,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "95b1b91a96f34857",
+        "type": "websocket out",
+        "z": "5a71bb56b7d15f27",
+        "name": "",
+        "server": "",
+        "client": "fd98ea4216df46bc",
+        "x": 720,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "644432140a36c6ef",
+        "type": "inject",
+        "z": "5a71bb56b7d15f27",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "Hello",
+        "payloadType": "str",
+        "x": 330,
+        "y": 580,
+        "wires": [
+            [
+                "95b1b91a96f34857"
+            ]
+        ]
+    },
+    {
+        "id": "99c9e6d12af56999",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "mosquitto",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "fd98ea4216df46bc",
+        "type": "websocket-client",
+        "path": "ws://nodered_fastapi:8000/ws",
+        "tls": "",
+        "wholemsg": "false",
+        "hb": "0",
+        "subprotocol": "",
+        "headers": []
+    }
+]

@@ -78,9 +78,9 @@ Hello World
 
 ## ホストからコマンドラインでテストする
 
-### 方法1: `wscat`を使用（推奨）
+### `wscat`を使用
 
-Node.jsがインストールされている場合、`wscat`が最も簡単です。
+Node.jsがインストールされている場合、`wscat`を使用してWebSocket接続をテストできます。
 
 #### インストール
 
@@ -112,85 +112,6 @@ Connected (press CTRL+C to quit)
 
 終了するには`Ctrl+C`を押します。
 
-### 方法2: `websocat`を使用
-
-`websocat`はWebSocket専用のコマンドラインツールです。
-
-#### インストール
-
-```bash
-# Ubuntu/Debian
-sudo apt install websocat
-
-# macOS
-brew install websocat
-```
-
-#### 使用方法
-
-```bash
-# 接続
-websocat ws://localhost:8880/ws
-
-# 接続後、メッセージを入力してEnterを押す
-```
-
-#### 実行例
-
-```bash
-$ websocat ws://localhost:8880/ws
-Hello from websocat
-{"type":"echo","message":"Hello from websocat","timestamp":"2025-11-16T10:00:00.123456"}
-```
-
-### 方法3: Pythonスクリプト
-
-プログラムでWebSocketをテストする場合に便利です。
-
-#### スクリプト例
-
-```python
-#!/usr/bin/env python3
-"""
-WebSocket echo test script for FastAPI /ws endpoint
-"""
-import asyncio
-import websockets
-import json
-
-async def test_websocket():
-    uri = "ws://localhost:8880/ws"
-
-    async with websockets.connect(uri) as websocket:
-        print(f"Connected to {uri}")
-
-        # Send messages
-        messages = ["Hello", "WebSocket", "Test"]
-
-        for msg in messages:
-            await websocket.send(msg)
-            print(f"Sent: {msg}")
-
-            response = await websocket.recv()
-            data = json.loads(response)
-            print(f"Received: {json.dumps(data, indent=2)}")
-            print()
-
-if __name__ == "__main__":
-    # Install: pip install websockets
-    asyncio.run(test_websocket())
-```
-
-#### 実行
-
-```bash
-# websocketsライブラリをインストール
-pip install websockets
-
-# スクリプトを実行
-python3 test_websocket.py
-```
-
 ## Node-REDでWebSocketを使用する
 
 ### 基本的なフロー
@@ -215,228 +136,46 @@ python3 test_websocket.py
    - 送信: inject → websocket out
    - 受信: websocket in → debug
 
-### サンプルフロー（JSON）
+### サンプルフロー
 
-以下のJSONをインポートして、すぐに試すことができます：
+WebSocket接続のサンプルフローは `examples/mqtt_websocket_example.json` に含まれています。
 
-```json
-[
-    {
-        "id": "websocket-example-tab",
-        "type": "tab",
-        "label": "WebSocket Echo Example",
-        "disabled": false,
-        "info": ""
-    },
-    {
-        "id": "inject-message",
-        "type": "inject",
-        "z": "websocket-example-tab",
-        "name": "Send Message",
-        "props": [
-            {
-                "p": "payload"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "Hello from Node-RED",
-        "payloadType": "str",
-        "x": 140,
-        "y": 100,
-        "wires": [["websocket-out"]]
-    },
-    {
-        "id": "websocket-out",
-        "type": "websocket out",
-        "z": "websocket-example-tab",
-        "name": "Send to FastAPI",
-        "server": "",
-        "client": "websocket-client",
-        "x": 360,
-        "y": 100,
-        "wires": []
-    },
-    {
-        "id": "websocket-in",
-        "type": "websocket in",
-        "z": "websocket-example-tab",
-        "name": "Receive from FastAPI",
-        "server": "",
-        "client": "websocket-client",
-        "x": 170,
-        "y": 180,
-        "wires": [["debug-response", "parse-response"]]
-    },
-    {
-        "id": "debug-response",
-        "type": "debug",
-        "z": "websocket-example-tab",
-        "name": "Raw Response",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 430,
-        "y": 160,
-        "wires": []
-    },
-    {
-        "id": "parse-response",
-        "type": "json",
-        "z": "websocket-example-tab",
-        "name": "Parse JSON",
-        "property": "payload",
-        "action": "",
-        "pretty": false,
-        "x": 410,
-        "y": 200,
-        "wires": [["extract-message"]]
-    },
-    {
-        "id": "extract-message",
-        "type": "function",
-        "z": "websocket-example-tab",
-        "name": "Extract Message",
-        "func": "// Extract echoed message and timestamp\nif (msg.payload && msg.payload.message) {\n    msg.payload = {\n        echoed: msg.payload.message,\n        timestamp: msg.payload.timestamp,\n        type: msg.payload.type\n    };\n}\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 610,
-        "y": 200,
-        "wires": [["debug-extracted"]]
-    },
-    {
-        "id": "debug-extracted",
-        "type": "debug",
-        "z": "websocket-example-tab",
-        "name": "Extracted Data",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 820,
-        "y": 200,
-        "wires": []
-    },
-    {
-        "id": "websocket-client",
-        "type": "websocket-client",
-        "path": "ws://fastapi:8000/ws",
-        "tls": "",
-        "wholemsg": "true",
-        "hb": "0",
-        "hbInterval": "15"
-    }
-]
+### フロー構成
+
+```
+[inject] → [websocket out]
+
+[websocket in] → [debug]
 ```
 
-### フローの説明
+### ノードの説明
 
-このサンプルフローには、以下のノードが含まれています：
+1. **inject**
+   - ボタンをクリックして「Hello」を送信
+   - `payload`: `"Hello"`（文字列）
 
-1. **inject (Send Message)**
-   - ボタンをクリックして「Hello from Node-RED」を送信
-
-2. **websocket out (Send to FastAPI)**
+2. **websocket out**
    - FastAPIのWebSocketエンドポイントにメッセージを送信
+   - 接続先: `ws://nodered_fastapi:8000/ws`
+   - 送受信: `entire message object`を送信しない（`false`）
 
-3. **websocket in (Receive from FastAPI)**
+3. **websocket in**
    - FastAPIからのエコーレスポンスを受信
+   - 同じWebSocketクライアント設定を使用
 
-4. **debug (Raw Response)**
-   - 受信した生のJSONレスポンスを表示
-
-5. **json (Parse JSON)**
-   - JSON文字列をオブジェクトにパース
-
-6. **function (Extract Message)**
-   - エコーされたメッセージとタイムスタンプを抽出
-
-7. **debug (Extracted Data)**
-   - 抽出されたデータを表示
+4. **debug**
+   - 受信したメッセージを表示
 
 ### インポート手順
 
-1. 上記のJSONをコピー
+1. `examples/mqtt_websocket_example.json`の内容をコピー
 2. Node-REDのメニュー（☰）→「インポート」を選択
 3. JSONを貼り付けて「インポート」をクリック
 4. デプロイ
-5. 「Send Message」injectノードのボタンをクリック
+5. injectノードのボタンをクリック
 6. デバッグタブで受信したメッセージを確認
 
-## 応用例
-
-### 双方向チャット
-
-WebSocketを使用して、双方向の通信を実装：
-
-```
-[inject] → [websocket out] → FastAPI
-FastAPI → [websocket in] → [debug]
-```
-
-### 定期的なメッセージ送信
-
-一定間隔でメッセージを送信して、リアルタイム通信をシミュレート：
-
-```
-[inject: interval 5s] → [function: Add timestamp] → [websocket out]
-```
-
-**Functionノード例:**
-
-```javascript
-msg.payload = `Message at ${new Date().toISOString()}`;
-return msg;
-```
-
-### メッセージカウンター
-
-送受信したメッセージ数をカウント：
-
-```
-[websocket in] → [function: Count messages] → [debug]
-```
-
-**Functionノード例:**
-
-```javascript
-// Initialize counter in context
-let count = context.get('count') || 0;
-count++;
-context.set('count', count);
-
-msg.payload = {
-    count: count,
-    message: msg.payload
-};
-
-return msg;
-```
-
-### エラーハンドリング
-
-WebSocket接続エラーを処理：
-
-```
-[websocket in] → [switch: Check status] → [debug: Connected]
-                                        → [debug: Error]
-```
+**注意**: WebSocket接続先が `ws://nodered_fastapi:8000/ws` になっています。これはDockerコンテナ名を使用した接続です。
 
 ## WebSocket接続状態の管理
 

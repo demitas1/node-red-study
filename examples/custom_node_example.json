@@ -1,0 +1,63 @@
+[
+    {
+        "id": "6594b5cf18e0d840",
+        "type": "tab",
+        "label": "Custom Node",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "bf501535b88ffd13",
+        "type": "debug",
+        "z": "6594b5cf18e0d840",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 940,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "ab297e65943e1ed6",
+        "type": "tokyo-weather",
+        "z": "6594b5cf18e0d840",
+        "d": true,
+        "name": "",
+        "interval": 10,
+        "x": 440,
+        "y": 340,
+        "wires": [
+            [
+                "928ffd706571066e"
+            ]
+        ]
+    },
+    {
+        "id": "928ffd706571066e",
+        "type": "weather-formatter",
+        "z": "6594b5cf18e0d840",
+        "name": "",
+        "x": 710,
+        "y": 340,
+        "wires": [
+            [
+                "bf501535b88ffd13"
+            ]
+        ]
+    },
+    {
+        "id": "a8782cf62668dc39",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-contrib-my-nodes": "0.1.0"
+        }
+    }
+]

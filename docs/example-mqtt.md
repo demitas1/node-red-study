@@ -127,218 +127,42 @@ Node-REDフロー内で使用する接続情報：
    - 「debug」ノードを配置して、mqtt inノードの出力と接続
    - デプロイして動作を確認
 
-### サンプルフロー（JSON）
+### サンプルフロー
 
-以下のJSONをインポートして、すぐに試すことができます：
+MQTT接続のサンプルフローは `examples/mqtt_websocket_example.json` に含まれています。
 
-```json
-[
-    {
-        "id": "mqtt-example-tab",
-        "type": "tab",
-        "label": "MQTT Temperature Example",
-        "disabled": false,
-        "info": ""
-    },
-    {
-        "id": "mqtt-in-temp",
-        "type": "mqtt in",
-        "z": "mqtt-example-tab",
-        "name": "Temperature Sensor",
-        "topic": "sensors/temperature",
-        "qos": "0",
-        "datatype": "json",
-        "broker": "mqtt-broker",
-        "nl": false,
-        "rap": true,
-        "rh": 0,
-        "inputs": 0,
-        "x": 170,
-        "y": 100,
-        "wires": [["debug-temp", "process-temp"]]
-    },
-    {
-        "id": "debug-temp",
-        "type": "debug",
-        "z": "mqtt-example-tab",
-        "name": "Raw Message",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 420,
-        "y": 80,
-        "wires": []
-    },
-    {
-        "id": "process-temp",
-        "type": "function",
-        "z": "mqtt-example-tab",
-        "name": "Extract Temperature",
-        "func": "// Extract temperature and timestamp\nmsg.payload = {\n    temp: msg.payload.temperature,\n    time: msg.payload.timestamp,\n    tempF: (msg.payload.temperature * 9/5) + 32  // Convert to Fahrenheit\n};\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 430,
-        "y": 120,
-        "wires": [["debug-processed"]]
-    },
-    {
-        "id": "debug-processed",
-        "type": "debug",
-        "z": "mqtt-example-tab",
-        "name": "Processed Data",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 660,
-        "y": 120,
-        "wires": []
-    },
-    {
-        "id": "mqtt-broker",
-        "type": "mqtt-broker",
-        "name": "Mosquitto Broker",
-        "broker": "mosquitto",
-        "port": "1883",
-        "clientid": "",
-        "autoConnect": true,
-        "usetls": false,
-        "protocolVersion": "4",
-        "keepalive": "60",
-        "cleansession": true,
-        "autoUnsubscribe": true,
-        "birthTopic": "",
-        "birthQos": "0",
-        "birthRetain": "false",
-        "birthPayload": "",
-        "birthMsg": {},
-        "closeTopic": "",
-        "closeQos": "0",
-        "closeRetain": "false",
-        "closePayload": "",
-        "closeMsg": {},
-        "willTopic": "",
-        "willQos": "0",
-        "willRetain": "false",
-        "willPayload": "",
-        "willMsg": {},
-        "userProps": "",
-        "sessionExpiry": ""
-    }
-]
+### フロー構成
+
+```
+[mqtt in] → [json] → [debug]
 ```
 
-### フローの説明
+### ノードの説明
 
-このサンプルフローには、以下のノードが含まれています：
+1. **mqtt in**
+   - トピック `room/temperature` をサブスクライブ
+   - QoS: 2（最高レベルの配信保証）
+   - データタイプ: auto-detect（自動検出）
+   - ブローカー: `mosquitto:1883`
 
-1. **mqtt in (Temperature Sensor)**
-   - トピック `sensors/temperature` をサブスクライブ
-   - JSONを自動的にパース
+2. **json**
+   - 受信した文字列をJSONオブジェクトにパース
+   - `msg.payload`をオブジェクト形式に変換
 
-2. **debug (Raw Message)**
-   - 受信した生データを表示
-
-3. **function (Extract Temperature)**
-   - 温度データを抽出し、摂氏から華氏に変換
-
-4. **debug (Processed Data)**
-   - 処理後のデータを表示
+3. **debug**
+   - パース後のJSONオブジェクトを表示
 
 ### インポート手順
 
-1. 上記のJSONをコピー
+1. `examples/mqtt_websocket_example.json`の内容をコピー
 2. Node-REDのメニュー（☰）→「インポート」を選択
 3. JSONを貼り付けて「インポート」をクリック
 4. デプロイ
 5. 温度センサーシミュレーターを起動：
    ```bash
-   ./scripts/start-temperature-simulator.sh
+   ./scripts/start-temperature-simulator.sh 5 room/temperature
    ```
 6. デバッグタブで受信したメッセージを確認
-
-## 応用例
-
-### 温度の監視とアラート
-
-特定の温度を超えた場合にアラートを出すフロー：
-
-```
-[mqtt in] → [function: Check Threshold] → [switch] → [debug: High Temp Alert]
-                                                    → [debug: Normal]
-```
-
-**Functionノード例:**
-
-```javascript
-const threshold = 24.8;
-const temp = msg.payload.temperature;
-
-msg.alert = temp > threshold;
-msg.payload.status = msg.alert ? "HIGH" : "NORMAL";
-
-return msg;
-```
-
-### データの蓄積
-
-受信したデータをファイルに保存：
-
-```
-[mqtt in] → [function: Format CSV] → [file] → [debug]
-```
-
-### 複数のトピックをサブスクライブ
-
-ワイルドカード（`+`、`#`）を使用：
-
-- `sensors/+` - `sensors/`配下のすべての単一レベル（`sensors/temperature`, `sensors/humidity`など）
-- `sensors/#` - `sensors/`配下のすべてのレベル（`sensors/room1/temperature`, `sensors/room2/humidity`など）
-
-## MQTTメッセージを送信する
-
-### mqtt outノードを使用
-
-1. **mqtt outノードを配置**
-2. **Serverを設定**（mqtt inと同じブローカー設定を使用）
-3. **Topicを設定**
-   - 送信先のトピックを指定
-4. **QoSとRetainを設定**
-   - **QoS**: メッセージの配信保証レベル（0, 1, 2）
-   - **Retain**: ブローカーにメッセージを保持させるか
-
-### 送信例
-
-```
-[inject] → [function: Create Message] → [mqtt out]
-```
-
-**Functionノード例:**
-
-```javascript
-msg.payload = {
-    temperature: 25.5,
-    timestamp: new Date().toISOString(),
-    unit: "celsius"
-};
-
-msg.topic = "sensors/custom";
-
-return msg;
-```
 
 ## トラブルシューティング
 
@@ -355,17 +179,6 @@ return msg;
 
 3. **ネットワークを確認**
    - すべてのコンテナが同じネットワーク（`nodered_net`）に接続されているか
-
-### メッセージが受信できない
-
-1. **トピック名を確認**
-   - シミュレーターとNode-REDで同じトピックを使用しているか
-
-2. **デバッグノードが有効になっているか確認**
-   - デバッグノードの右側のボタンが緑色になっているか
-
-3. **シミュレーターが動作しているか確認**
-   - ターミナルに「Published:」メッセージが表示されているか
 
 ### JSONがパースされない
 

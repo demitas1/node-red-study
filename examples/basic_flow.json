@@ -1,0 +1,215 @@
+[
+    {
+        "id": "6467c576ebcb732e",
+        "type": "tab",
+        "label": "Basic Flow",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "395d0d87960e3753",
+        "type": "debug",
+        "z": "6467c576ebcb732e",
+        "name": "debug 4",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1060,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "902554579ca513de",
+        "type": "inject",
+        "z": "6467c576ebcb732e",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 340,
+        "y": 180,
+        "wires": [
+            [
+                "7face5a5dcbe0187",
+                "395d0d87960e3753"
+            ]
+        ]
+    },
+    {
+        "id": "7face5a5dcbe0187",
+        "type": "function",
+        "z": "6467c576ebcb732e",
+        "name": "epoch -> string",
+        "func": "var epoch = msg.payload;\n\n// epochミリ秒からDateオブジェクトを作成\nconst date = new Date(epoch);\n\nconst localString = date.toLocaleString();\n// epoch -> 文字列へ変換　例: \"2024/11/17 18:00:00\"\n\nmsg.payload = localString;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 700,
+        "y": 260,
+        "wires": [
+            [
+                "395d0d87960e3753"
+            ]
+        ]
+    },
+    {
+        "id": "efad19bb4e62f8ca",
+        "type": "inject",
+        "z": "6467c576ebcb732e",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "hello_world/input_text",
+        "payload": "Hello, world",
+        "payloadType": "str",
+        "x": 330,
+        "y": 120,
+        "wires": [
+            [
+                "2fd2bdb588aba230"
+            ]
+        ]
+    },
+    {
+        "id": "2fd2bdb588aba230",
+        "type": "debug",
+        "z": "6467c576ebcb732e",
+        "name": "debug 5",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1060,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "cac144119533275f",
+        "type": "inject",
+        "z": "6467c576ebcb732e",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "1",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "hello_world/ticker",
+        "payload": "",
+        "payloadType": "date",
+        "x": 350,
+        "y": 380,
+        "wires": [
+            [
+                "1461e5d7b55a660b"
+            ]
+        ]
+    },
+    {
+        "id": "1461e5d7b55a660b",
+        "type": "function",
+        "z": "6467c576ebcb732e",
+        "name": "timestampつきデータ生成",
+        "func": "// ticker から得た最新の時刻をコンテキストに記録\nif (msg.topic === \"hello_world/ticker\") {\n    let now = Number(msg.payload);\n    context.set(\"now\", now);\n    return null;\n}\n\n// 文字列を受信したら最新時刻を付与して送信\nif (msg.topic === \"hello_world/input_text\") { \n    let text = String(msg.payload);\n\n    node.send({\n        topic: \"hello_world/timed_text\",\n        payload: {\n            text: text,\n            timestamp: context.get(\"now\"),\n        }\n    });\n    return null;\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 690,
+        "y": 380,
+        "wires": [
+            [
+                "74bddb329bc881f8"
+            ]
+        ]
+    },
+    {
+        "id": "74bddb329bc881f8",
+        "type": "debug",
+        "z": "6467c576ebcb732e",
+        "name": "debug 6",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1080,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "3a8dfabd3837b0bd",
+        "type": "inject",
+        "z": "6467c576ebcb732e",
+        "name": "テキスト",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "hello_world/input_text",
+        "payload": "現在の時刻をお知らせします",
+        "payloadType": "str",
+        "x": 340,
+        "y": 320,
+        "wires": [
+            [
+                "1461e5d7b55a660b"
+            ]
+        ]
+    }
+]
